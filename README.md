@@ -1,6 +1,8 @@
-# Smart QR Business Card Platform
+# SynoCard - Smart Digital Business Card Platform
 
-A modern platform for creating smart business cards with QR codes and personal profile websites.
+A modern platform for creating smart digital business cards with QR codes and personal profile websites.
+
+🌐 **Live Demo**: [https://synocard.vercel.app/](https://synocard.vercel.app/)
 
 ## 🚀 Quick Start
 
@@ -14,15 +16,13 @@ A modern platform for creating smart business cards with QR codes and personal p
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd smart-card-platform
+   git clone https://github.com/khaanh112/Smart-Card.git
+   cd KNKN
    ```
 
-2. **Create environment file**
-   ```bash
-   copy .env.example .env
-   ```
-   Edit `.env` and update the values as needed.
+2. **Set up environment file**
+   
+   The `.env` file is already configured with default values. Update if needed for production.
 
 3. **Start all services**
    ```bash
@@ -96,30 +96,36 @@ docker-compose down -v
 ```
 ├── backend/              # Express.js API
 │   ├── src/
-│   │   ├── routes/      # API routes
+│   │   ├── routes/      # API routes (auth, profile, analytics)
 │   │   ├── controllers/ # Request handlers
-│   │   ├── services/    # Business logic
-│   │   ├── middleware/  # Express middleware
-│   │   └── utils/       # Utility functions
+│   │   ├── middleware/  # Auth & rate limiting
+│   │   ├── utils/       # JWT, QR code, validation
+│   │   ├── lib/         # Prisma client
+│   │   └── config/      # Swagger configuration
 │   ├── prisma/          # Database schema & migrations
-│   ├── uploads/         # File uploads
+│   │   ├── schema.prisma
+│   │   ├── seed.js
+│   │   └── migrations/
+│   ├── uploads/         # File uploads (avatars, QR codes)
 │   └── package.json
 │
 ├── frontend/            # React + Vite SPA
 │   ├── src/
 │   │   ├── components/  # React components
+│   │   │   ├── analytics/  # Profile analytics
+│   │   │   └── wizard/     # Profile creation wizard
 │   │   ├── pages/       # Page components
+│   │   │   ├── public/     # Public profile view
+│   │   │   ├── CreateProfileWizard.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   └── EditProfile.jsx
 │   │   ├── themes/      # Profile themes
-│   │   ├── hooks/       # Custom React hooks
-│   │   ├── store/       # State management (Zustand)
-│   │   └── utils/       # Utility functions
+│   │   ├── store/       # Zustand state management
+│   │   ├── config/      # API configuration
+│   │   └── utils/       # Validation schemas
 │   └── package.json
 │
-├── shared/              # Shared code (types, utils)
-├── docker/              # Docker configurations
-├── docs/                # Documentation
-│   └── prd/            # Product Requirements
-└── docker-compose.yml
+└── docker-compose.yml   # Docker orchestration
 ```
 
 ## 🛠️ Tech Stack
@@ -138,17 +144,16 @@ docker-compose down -v
 - Express.js (Web framework)
 - Prisma (ORM)
 - PostgreSQL 15 (Database)
-- Redis (Caching & Sessions)
-- Passport.js (Authentication)
-- JWT (Tokens)
-- Puppeteer (Card generation)
-- Sharp (Image processing)
+- JWT (Authentication)
+- Swagger/OpenAPI (API documentation)
+- QRCode (QR code generation)
+- Express Rate Limit (API protection)
+- Multer (File uploads)
 
-### DevOps
+### DevOps & Deployment
 - Docker & Docker Compose
-- Nginx (Reverse proxy)
-- PM2 (Process management)
-- GitHub Actions (CI/CD)
+- Vercel (Frontend hosting)
+- Railway (Backend hosting - optional)
 
 ## 📚 API Documentation
 
@@ -164,6 +169,16 @@ Once the backend is running, visit:
 - `POST /api/v1/auth/refresh` - Refresh access token
 - `POST /api/v1/auth/logout` - Logout and invalidate tokens
 - `GET /api/v1/auth/me` - Get current user (protected)
+
+#### Profile Management
+- `POST /api/v1/profile` - Create profile
+- `GET /api/v1/profile/:username` - Get profile by username
+- `PUT /api/v1/profile/:id` - Update profile
+- `DELETE /api/v1/profile/:id` - Delete profile
+
+#### Analytics
+- `POST /api/v1/analytics/profile-view` - Track profile view
+- `GET /api/v1/analytics/profile/:profileId` - Get profile analytics
 
 The Swagger documentation provides detailed information about:
 - Request/response schemas
@@ -201,23 +216,24 @@ npm run test:e2e
    - Username: postgres
    - Password: (from .env)
 
-### Google OAuth Setup
+## 🎯 Features
 
-1. Go to Google Cloud Console
-2. Create new project or select existing
-3. Enable Google+ API
-4. Create OAuth 2.0 credentials
-5. Add authorized redirect URI: `http://localhost:3000/api/v1/auth/google/callback`
-6. Copy Client ID and Secret to `.env`
+- **User Authentication**: Secure JWT-based authentication with refresh tokens
+- **Profile Creation Wizard**: Step-by-step guide to create professional profiles
+- **QR Code Generation**: Automatic QR code generation for each profile
+- **Profile Analytics**: Track profile views and engagement
+- **Responsive Design**: Mobile-first design with Tailwind CSS
+- **File Upload**: Avatar and image upload support
+- **Public Profile Pages**: Shareable profile URLs (e.g., `/profile/:username`)
+- **Dashboard**: Manage multiple profiles and view analytics
 
-## 📖 Documentation
+## 🚢 Deployment
 
-- [Product Requirements (PRD)](docs/prd.md)
-- [Epic 1: Foundation](docs/prd/epic-1-foundation.md)
-- [Epic 2: Profile Creation](docs/prd/epic-2-profile-creation.md)
-- [Epic 3: Card Generation](docs/prd/epic-3-card-generation.md)
-- [Epic 4: Dashboard](docs/prd/epic-4-dashboard.md)
-- [Epic 5: Profile Rendering](docs/prd/epic-5-profile-rendering.md)
+### Frontend (Vercel)
+The frontend is deployed on Vercel at [https://synocard.vercel.app/](https://synocard.vercel.app/)
+
+### Backend (Local/Railway)
+Backend can be deployed to Railway or any Node.js hosting platform. Update the `BACKEND_URL` in frontend configuration.
 
 ## 🤝 Contributing
 
@@ -230,10 +246,10 @@ npm run test:e2e
 
 MIT License
 
-## 👥 Team
+## 👥 Author
 
-- Product Manager: [Name]
-- Developer: [Name]
+- GitHub: [khaanh112](https://github.com/khaanh112)
+- Project: SynoCard - Smart Digital Business Card Platform
 
 ## 🐛 Troubleshooting
 
