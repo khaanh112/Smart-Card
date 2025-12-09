@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { FaEnvelope, FaLock, FaSpinner } from 'react-icons/fa';
+import { API_BASE_URL } from '../config/api';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/v1/auth/login',
+        `${API_BASE_URL}/auth/login`,
         formData
       );
 
@@ -49,7 +50,7 @@ const LoginPage = () => {
 
   const handleGoogleLogin = () => {
     // Redirect to Google OAuth endpoint
-    window.location.href = 'http://localhost:3000/api/v1/auth/google';
+    window.location.href = `${API_BASE_URL}/auth/google`;
   };
 
   return (
@@ -58,7 +59,7 @@ const LoginPage = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            🎴 Smart Card
+             SynoCard
           </h1>
           <h2 className="text-2xl font-semibold text-gray-800 mb-2">
             Welcome Back
